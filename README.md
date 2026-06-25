@@ -2,7 +2,7 @@
 
 Why is AI the only interface on your computer that speaks in the first person? 
 
-The ability of LLMs to simulate personhood is incredible, but most of the time, a conversation is a bad interface. If you had a talking fork, you still wouldn't want to have a verbla back-and-forth with it to tell it to put food in your mouth every bite.
+The ability of LLMs to simulate personhood is incredible, but most of the time, a conversation is a bad interface. If you had a talking fork, you still wouldn't want to have a verbal back-and-forth with it to tell it to put food in your mouth every bite.
 
 You can still have a chat modality, where the user expresses their intent in natural language, but the system's turn consist of impersonal statements, structured data, and controls.
 
