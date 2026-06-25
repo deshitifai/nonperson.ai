@@ -1,3 +1,5 @@
+[nonperson.ai](https://nonperson.ai)
+
 # Take the "I" out of AI
 
 Why is AI the only interface on your computer that speaks in the first person? 
