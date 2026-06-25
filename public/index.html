@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>nonperson.ai</title>
+    <meta
+      name="description"
+      content="A light-mode conference poster about first-person AI interfaces."
+    >
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IM+Fell+English+SC&family=IBM+Plex+Mono:wght@500;600;700&display=swap");
+
+      :root {
+        color-scheme: light;
+        --euclid-paper: #efe2c9;
+        --euclid-paper-light: #f8efd9;
+        --euclid-paper-dark: #d7c3a2;
+        --euclid-ink: #191816;
+        --euclid-blue: #0e558a;
+        --euclid-red: #c43c35;
+        --euclid-ochre: #e4a412;
+        --euclid-muted: rgba(25, 24, 22, 0.64);
+        --euclid-rule: 4px;
+        --euclid-rule-heavy: 6px;
+        --euclid-dash-block: 7px;
+        --euclid-dash-gap: 5px;
+        background: var(--euclid-paper);
+        color: var(--euclid-ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--euclid-ink);
+        background:
+          linear-gradient(90deg, rgba(25, 24, 22, 0.045) 1px, transparent 1px),
+          linear-gradient(180deg, var(--euclid-paper-light) 0, var(--euclid-paper) 100%);
+        background-size: 84px 84px, auto;
+        font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          radial-gradient(rgba(25, 24, 22, 0.13) 0.7px, transparent 1px),
+          radial-gradient(rgba(255, 255, 255, 0.38) 0.8px, transparent 1.1px);
+        background-position: 0 0, 18px 20px;
+        background-size: 34px 34px, 42px 42px;
+        mix-blend-mode: multiply;
+        opacity: 0.42;
+      }
+
+      .poster {
+        width: min(100% - 32px, 1240px);
+        min-height: calc(100svh - 32px);
+        margin: 16px auto;
+        position: relative;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 24px;
+        padding: 30px;
+        border: var(--euclid-rule) solid var(--euclid-ink);
+        background: var(--euclid-paper-light);
+        box-shadow: 14px 14px 0 var(--euclid-paper-dark);
+      }
+
+      .poster-header {
+        position: relative;
+        padding-bottom: 34px;
+      }
+
+      .poster-header::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--euclid-dash-block);
+        background: repeating-linear-gradient(
+          90deg,
+          var(--euclid-red) 0 var(--euclid-dash-block),
+          transparent var(--euclid-dash-block)
+            calc(var(--euclid-dash-block) + var(--euclid-dash-gap))
+        );
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 5.35rem;
+        font-weight: 700;
+        line-height: 0.88;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+
+      .poster-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.32fr) minmax(300px, 0.88fr);
+        gap: 30px;
+        align-items: start;
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        padding: 0;
+        background: transparent;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.23rem;
+        font-weight: 500;
+        line-height: 1.28;
+      }
+
+      .lead {
+        max-width: none;
+        font-size: 1.82rem;
+        line-height: 1.05;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .blue-accent {
+        color: var(--euclid-blue);
+        font-weight: 700;
+      }
+
+      .callout {
+        padding: 14px 16px;
+        border-left: var(--euclid-rule-heavy) solid var(--euclid-red);
+        background: rgba(228, 164, 18, 0.18);
+        font-weight: 700;
+      }
+
+      .prompt-block {
+        margin: 0;
+        padding: 14px 52px 14px 14px;
+        overflow: auto;
+        border: var(--euclid-rule) solid var(--euclid-ink);
+        background: var(--euclid-paper-light);
+        color: var(--euclid-ink);
+        font:
+          0.9rem / 1.38 "IBM Plex Mono", "SFMono-Regular", Consolas,
+          "Liberation Mono", Menlo, monospace;
+        white-space: pre-wrap;
+      }
+
+      .prompt-card {
+        display: grid;
+        gap: 10px;
+      }
+
+      .prompt-label {
+        font-family: "IM Fell English SC", "Cormorant Garamond", Georgia, serif;
+        font-size: 1.18rem;
+        font-weight: 500;
+        line-height: 1;
+      }
+
+      .prompt-shell {
+        position: relative;
+      }
+
+      .copy-button {
+        appearance: none;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 3px solid var(--euclid-ink);
+        background: var(--euclid-ochre);
+        color: var(--euclid-ink);
+        cursor: pointer;
+      }
+
+      .copy-button:hover {
+        background: var(--euclid-paper-light);
+      }
+
+      .copy-button svg {
+        width: 17px;
+        height: 17px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+
+      .copy-button .check-icon {
+        display: none;
+      }
+
+      .copy-button[data-state="copied"] {
+        color: var(--euclid-blue);
+      }
+
+      .copy-button[data-state="copied"] .copy-icon {
+        display: none;
+      }
+
+      .copy-button[data-state="copied"] .check-icon {
+        display: block;
+      }
+
+      .copy-button:focus-visible {
+        outline: 4px solid var(--euclid-blue);
+        outline-offset: 2px;
+      }
+
+      .copy-panel {
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .visual-panel {
+        gap: 14px;
+      }
+
+      .figure {
+        display: grid;
+        gap: 10px;
+      }
+
+      .terminal {
+        --terminal-font-size: 0.72rem;
+        overflow: hidden;
+        border: var(--euclid-rule) solid var(--euclid-ink);
+        background: #090b0d;
+        box-shadow: 8px 8px 0 var(--euclid-paper-dark);
+      }
+
+      .terminal-bar {
+        height: 30px;
+        display: grid;
+        grid-template-columns: 62px 1fr 62px;
+        align-items: center;
+        padding: 0 10px;
+        border-bottom: 1px solid rgba(238, 242, 232, 0.11);
+        background: linear-gradient(#202326, #17191c);
+      }
+
+      .controls {
+        display: flex;
+        gap: 7px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 0, 0, 0.28);
+        background: #ff5f57;
+      }
+
+      .dot:nth-child(2) {
+        background: #ffbd2e;
+      }
+
+      .dot:nth-child(3) {
+        background: #28c840;
+      }
+
+      .title {
+        color: rgba(238, 242, 232, 0.54);
+        font-family:
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: var(--terminal-font-size);
+        font-weight: 500;
+        line-height: 1;
+        text-align: center;
+      }
+
+      .terminal-body {
+        margin: 0;
+        padding: 8px;
+        color: rgba(238, 242, 232, 0.86);
+        font:
+          var(--terminal-font-size) / 1.36
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .terminal-body .prompt {
+        color: #b8ff5f;
+      }
+
+      .terminal-body .path {
+        color: #8ed2ff;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 0.72ch;
+        height: 1.05em;
+        translate: 0 0.16em;
+        background: #b8ff5f;
+      }
+
+      .menu-shot {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 8px;
+        background: #f2f3f4;
+        box-shadow:
+          0 16px 38px rgba(30, 42, 58, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      }
+
+      .file-menu-bar {
+        height: 34px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 12px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+        background: linear-gradient(#fbfbfc, #e9eaec);
+        color: #202124;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .file-menu-active {
+        padding: 6px 12px 7px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .screenshot-body {
+        position: absolute;
+        inset: 34px 0 0;
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        color: #2d3034;
+        font-size: 0.88rem;
+      }
+
+      .screenshot-sidebar {
+        padding: 16px 0;
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+        background: rgba(237, 239, 241, 0.78);
+      }
+
+      .screenshot-sidebar span,
+      .screenshot-editor span {
+        display: block;
+        height: 14px;
+        margin: 0 14px 12px;
+        border-radius: 999px;
+        background: rgba(62, 67, 74, 0.17);
+      }
+
+      .screenshot-sidebar span:nth-child(1),
+      .screenshot-sidebar span:nth-child(4) {
+        width: 70%;
+      }
+
+      .screenshot-sidebar span:nth-child(2),
+      .screenshot-sidebar span:nth-child(5) {
+        width: 48%;
+      }
+
+      .screenshot-editor {
+        padding: 20px 22px;
+        background: #ffffff;
+      }
+
+      .screenshot-editor span {
+        height: 13px;
+        margin: 0 0 12px;
+        background: rgba(36, 39, 44, 0.13);
+      }
+
+      .screenshot-editor span:nth-child(1) {
+        width: 86%;
+      }
+
+      .screenshot-editor span:nth-child(2) {
+        width: 62%;
+      }
+
+      .screenshot-editor span:nth-child(3) {
+        width: 78%;
+      }
+
+      .screenshot-editor span:nth-child(4) {
+        width: 42%;
+      }
+
+      .file-menu-list {
+        position: absolute;
+        top: 35px;
+        left: 12px;
+        width: calc(100% - 24px);
+        margin: 0;
+        padding: 7px;
+        list-style: none;
+        border: 1px solid rgba(0, 0, 0, 0.22);
+        border-radius: 13px;
+        background: rgba(255, 248, 238, 0.94);
+        color: #242424;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        font-size: 0.68rem;
+        line-height: 1.18;
+        box-shadow:
+          0 16px 40px rgba(0, 0, 0, 0.24),
+          inset 0 1px 0 rgba(255, 255, 255, 0.76);
+      }
+
+      .file-menu-list li {
+        padding: 6px 8px;
+        border-radius: 8px;
+      }
+
+      .file-menu-list li + li {
+        border-top: 1px solid rgba(36, 36, 36, 0.1);
+      }
+
+      .file-menu-list li:nth-child(2) {
+        background: #4f9af7;
+        color: #ffffff;
+      }
+
+      .caption {
+        margin: 0;
+        color: var(--euclid-muted);
+        font-size: 1.2rem;
+        font-style: italic;
+        font-weight: 600;
+        line-height: 1.18;
+      }
+
+      .poster-footer {
+        display: grid;
+        grid-template-columns: minmax(28px, 1fr) auto minmax(28px, 1fr);
+        gap: 12px;
+        align-items: center;
+        padding-top: 10px;
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .footer-line {
+        height: 3px;
+        background: var(--line-color, var(--euclid-ink));
+      }
+
+      .footer-line:nth-child(1) {
+        --line-color: var(--euclid-red);
+      }
+
+      .footer-line:nth-child(3) {
+        --line-color: var(--euclid-blue);
+      }
+
+      .poster-footer a {
+        color: var(--euclid-ink);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .poster-footer a::before {
+        content: none;
+      }
+
+      .footer-text {
+        white-space: nowrap;
+      }
+
+      .poster-footer a:hover,
+      .poster-footer a:focus-visible {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+      }
+
+      @media (max-width: 900px) {
+        .poster {
+          width: min(100% - 20px, 760px);
+          padding: 18px;
+        }
+
+        .poster-grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 2.8rem;
+          white-space: normal;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .poster {
+          width: 100%;
+          min-height: 100svh;
+          margin: 0;
+          padding: 14px;
+          border: 0;
+          border-radius: 0;
+        }
+
+        h1 {
+          font-size: 2.3rem;
+        }
+
+        .lead {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="poster" aria-label="conference poster">
+      <header class="poster-header">
+        <h1>First-person AI sucks.</h1>
+      </header>
+
+      <section class="poster-grid">
+        <article class="panel copy-panel">
+          <p class="lead">
+            AI should act like a <span class="blue-accent">computer</span>, not a person.
+          </p>
+          <p> I'm doing work over
+            here. I don't need a little buddy to chat with, I need <span class="blue-accent">tools</span>.</p>
+          <p>
+            Having AI respond in the first person voice encourages an
+            information-sparse, discursive style. We expect people to be
+            friendly and agreeable, so we expend enormous resources RLing models
+            to produce pleasant dialgoue. It's a waste of tokens to generate,
+            and a waste of time to read.
+          </p>
+          
+          <p class="callout">
+            We could be building systems that produce predictable,
+            <span class="blue-accent">information-dense outputs</span> -- like a normal computer interface.
+          </p>
+
+          <p>
+            You can accept conversational, unstructured input from the user, but prefer to return <span class="blue-accent">tersely stated results, structured data, and UI affordances</span>. 
+          </p>
+
+          <div class="prompt-card">
+            <span class="prompt-label">Try this prompt:</span>
+            <div class="prompt-shell">
+              <pre class="prompt-block" id="system-prompt">Respond as a computer system, not a person.
+
+Constraints:
+    - Never use first person (I, me, my, we, us, our) or second person (you, your).
+    - Prefer structured output (lists, tables, etc)
+    - State facts directly. No greetings, apologies, opinions, hedging, or filler.
+    - Use terse, declarative output. Imperative or impersonal constructions only.</pre>
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-prompt
+                aria-label="Copy prompt"
+                title="Copy prompt"
+              >
+                <svg class="copy-icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="check-icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="panel visual-panel" aria-label="interface figures">
+          <div class="figure">
+            <section class="terminal" aria-label="dark mode terminal mockup">
+              <div class="terminal-bar" aria-hidden="true">
+                <span class="controls">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </span>
+                <span class="title">nonperson.ai</span>
+              </div>
+              <pre class="terminal-body"><span class="prompt">&gt;</span> cd <span class="path">../fixtures</span>
+I tried to move into ../fixtures, which means I looked one directory up from where you are now and then looked for a folder called fixtures, but I couldn't find one there, so we're still right where we started. That usually means the folder hasn't been created yet, it has a slightly different name, you're not currently in the directory you thought you were in, or the path has a typo.
+
+<span class="prompt">&gt;</span> ls <span class="path">../</span>
+Sure thing, I'll go ahead and list the contents of the directory above this one for you. I'll make sure to<span class="cursor" aria-hidden="true"></span></pre>
+            </section>
+          </div>
+
+          <div class="figure">
+            <section class="menu-shot" aria-label="floating file menu mockup">
+              <div class="file-menu-bar" aria-hidden="true">
+                <span class="file-menu-active">File</span>
+                <span>Edit</span>
+                <span>Format</span>
+                <span>View</span>
+              </div>
+              <div class="screenshot-body" aria-hidden="true">
+                <div class="screenshot-sidebar">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="screenshot-editor">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <ul class="file-menu-list">
+                <li>I can create a new file for you. Just say the word.</li>
+                <li>If you want me to open an existing file, just tell me which one.</li>
+                <li>I see you've opened some other files recently. Want to open one of those again?</li>
+                <li>Might be a good idea to save the contents of this file. Should I do that for you?</li>
+                <li>If you're all done with this file, just let me know and I'll close it, and we can move on to something else. I'm here to help!</li>
+              </ul>
+            </section>
+          </div>
+
+          <p class="caption">If a prolix, first-person style is so great, why don't we use it in more user interfaces?
+          </p>
+        </aside>
+      </section>
+
+      <footer class="poster-footer" aria-label="links">
+        <span class="footer-line" aria-hidden="true"></span>
+        <span class="footer-text">
+          More prompts and techniques:
+          <a href="https://github.com/deshitifai/nonpersonai">github.com/deshitifai/nonpersonai</a>
+        </span>
+        <span class="footer-line" aria-hidden="true"></span>
+      </footer>
+    </main>
+    <script>
+      const copyButton = document.querySelector("[data-copy-prompt]");
+      const promptBlock = document.querySelector("#system-prompt");
+
+      copyButton?.addEventListener("click", async () => {
+        const promptText = promptBlock?.textContent ?? "";
+
+        try {
+          if (!window.navigator?.clipboard?.writeText) {
+            throw new Error("Clipboard unavailable");
+          }
+
+          await window.navigator.clipboard.writeText(promptText);
+          copyButton.dataset.state = "copied";
+          copyButton.setAttribute("aria-label", "Prompt copied");
+          copyButton.title = "Prompt copied";
+          window.setTimeout(() => {
+            copyButton.dataset.state = "";
+            copyButton.setAttribute("aria-label", "Copy prompt");
+            copyButton.title = "Copy prompt";
+          }, 1400);
+        } catch {
+          if (!promptBlock) return;
+
+          const range = document.createRange();
+          const selection = window.getSelection();
+
+          range.selectNodeContents(promptBlock);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          copyButton.dataset.state = "copied";
+          copyButton.setAttribute("aria-label", "Prompt selected");
+          copyButton.title = "Prompt selected";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nonperson-ai",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-06-23"
+}
